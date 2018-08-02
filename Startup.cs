@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JsonApiDotNetCore.Extensions;
+using LibraryApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,11 @@ namespace LibraryApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDbContext<AppDbContext>();
+            services.AddJsonApi<AppDbContext>();
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +47,9 @@ namespace LibraryApi
                 app.UseHsts();
             }
 
+            app.UseCors(a => a.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
+            app.UseJsonApi();
         }
     }
 }
