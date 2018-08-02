@@ -3,7 +3,7 @@ using JsonApiDotNetCore.Services;
 using LibraryApi.Models;
 using Microsoft.Extensions.Logging;
 
-namespace LibraryApi.Controllers
+namespace LibraryApi.Domain.Authors
 {
     public class AuthorsController : JsonApiController<Author>
     {
