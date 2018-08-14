@@ -10,6 +10,7 @@ using LibraryApi.Domain.Authors;
 using LibraryApi.Domain.Books;
 using LibraryApi.Domain.Users;
 using LibraryApi.Models;
+using LibraryApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -50,6 +51,7 @@ namespace LibraryApi
 
             services.AddCors();
 
+            services.AddScoped<CurrentUserService>();
             services.AddScoped<IEntityRepository<Author>, AuthorsRepository>();
             services.AddScoped<IEntityRepository<Book>, BooksRepository>();
             services.AddScoped<ResourceDefinition<User>, UserResource>();
