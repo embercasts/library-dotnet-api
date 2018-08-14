@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using JsonApiDotNetCore.Data;
 using JsonApiDotNetCore.Extensions;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryApi
 {
@@ -40,6 +42,12 @@ namespace LibraryApi
                 options.ValidateModelState = true;
             });
 
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JWT_SECRET"]));
+            var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+
+            services.AddSingleton(signingKey);
+            services.AddSingleton(creds);
+
             services.AddCors();
 
             services.AddScoped<IEntityRepository<Author>, AuthorsRepository>();
@@ -62,6 +70,11 @@ namespace LibraryApi
             app.UseCors(a => a.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
             app.UseJsonApi();
+
+            // var crypto = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            // var bytes = new byte[48];
+            // crypto.GetBytes(bytes);
+            // Console.WriteLine(Convert.ToBase64String(bytes));
         }
     }
 }
